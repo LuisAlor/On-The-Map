@@ -48,7 +48,6 @@
                                         <state key="normal" title="Login"/>
                                         <connections>
                                             <action selector="login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s75-2t-Wna"/>
-                                            <segue destination="KhB-if-f1o" kind="show" identifier="completeLogin" id="oVQ-bG-tTL"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -85,6 +84,7 @@
                     <connections>
                         <outlet property="passwordTextField" destination="QAU-xz-Y33" id="nJK-aE-RXn"/>
                         <outlet property="usernameTextField" destination="EVH-yu-MA8" id="pSx-64-qpd"/>
+                        <segue destination="KhB-if-f1o" kind="show" identifier="completeLogin" id="gMY-my-yQw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
