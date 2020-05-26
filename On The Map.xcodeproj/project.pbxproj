@@ -13,6 +13,7 @@
 		A2150197247C5184005D80CE /* LoginResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2150196247C5184005D80CE /* LoginResponse.swift */; };
 		A2150199247C526E005D80CE /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2150198247C526E005D80CE /* Account.swift */; };
 		A215019B247C52A3005D80CE /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = A215019A247C52A3005D80CE /* Session.swift */; };
+		A215019D247D641F005D80CE /* UdacityErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = A215019C247D641F005D80CE /* UdacityErrorResponse.swift */; };
 		A248E2742478205400A04D07 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A248E2732478205400A04D07 /* AppDelegate.swift */; };
 		A248E2762478205400A04D07 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A248E2752478205400A04D07 /* SceneDelegate.swift */; };
 		A248E2782478205400A04D07 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A248E2772478205400A04D07 /* LoginViewController.swift */; };
@@ -31,6 +32,7 @@
 		A2150196247C5184005D80CE /* LoginResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginResponse.swift; sourceTree = "<group>"; };
 		A2150198247C526E005D80CE /* Account.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Account.swift; sourceTree = "<group>"; };
 		A215019A247C52A3005D80CE /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		A215019C247D641F005D80CE /* UdacityErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UdacityErrorResponse.swift; sourceTree = "<group>"; };
 		A248E2702478205400A04D07 /* On The Map.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "On The Map.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A248E2732478205400A04D07 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A248E2752478205400A04D07 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 				A2150196247C5184005D80CE /* LoginResponse.swift */,
 				A2150198247C526E005D80CE /* Account.swift */,
 				A215019A247C52A3005D80CE /* Session.swift */,
+				A215019C247D641F005D80CE /* UdacityErrorResponse.swift */,
 			);
 			path = "Udacity Responses";
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				A248E28C2479745700A04D07 /* MapViewController.swift in Sources */,
 				A2150193247C2577005D80CE /* LoginRequest.swift in Sources */,
 				A2150195247C4164005D80CE /* Udacity.swift in Sources */,
+				A215019D247D641F005D80CE /* UdacityErrorResponse.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

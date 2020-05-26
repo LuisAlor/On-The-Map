@@ -26,7 +26,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 self.performSegue(withIdentifier: "completeLogin", sender: nil)
             }
             else {
-                print("Failed")
+                self.showLoginFailure(message: error?.localizedDescription ?? "")
             }
         }
     }
@@ -37,6 +37,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func showLoginFailure(message: String){
+           let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
+           alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+           show(alertVC, sender: nil)
     }
     
 }

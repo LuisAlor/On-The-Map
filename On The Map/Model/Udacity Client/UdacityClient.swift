@@ -60,8 +60,8 @@ class UdacityClient {
             }
             
             let filteredData = removeSecurityChars(data)
-            
             let decoder = JSONDecoder()
+            
             do {
                 let responseAPI = try decoder.decode(ResponseType.self, from: filteredData)
                 DispatchQueue.main.async {
@@ -69,9 +69,16 @@ class UdacityClient {
                 }
             }
             catch {
-                DispatchQueue.main.async {
-                    completionHandler(nil, error)
-                    print(error)
+                do {
+                    let responseError = try decoder.decode(UdacityErrorResponse.self, from: filteredData)
+                    DispatchQueue.main.async {
+                        completionHandler(nil, responseError)
+                    }
+                }
+                catch {
+                    DispatchQueue.main.async {
+                        completionHandler(nil, error)
+                    }
                 }
             }
         }
