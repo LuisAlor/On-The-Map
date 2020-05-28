@@ -12,18 +12,48 @@ class UdacityClient {
     
     struct Auth {
         static var sessionId = ""
+        static var objectId = ""
+        static var uniqueKey = ""
+    }
+    
+    enum sortStudentLocation{
+        case limit(by: String)
+        case skip(limit: String, skipBy: String)
+        case order(by: String)
+        case uniqueKey(id: String)
     }
     
     enum Endpoints {
         
         static let base = "https://onthemap-api.udacity.com/v1/"
         
-        case login
+        case session
+        case getUserData
+        case updateLocation
+        case createNewLocation
+        case getStudentsLocation(by: sortStudentLocation)
         
         var stringURL: String {
             switch self {
-            case .login:
+            case .session:
                 return Endpoints.base + "session"
+            case .getUserData:
+                return Endpoints.base + "users/\(Auth.uniqueKey)"
+            case .updateLocation:
+                return Endpoints.base + "StudentLocation/\(Auth.objectId)"
+            case .createNewLocation:
+                return Endpoints.base + "StudentLocation"
+            case let .getStudentsLocation(by):
+                switch by {
+                case let .limit(by):
+                    return Endpoints.base + "StudentLocation" + "?limit=\(by)"
+                case let .skip(limit, skipBy):
+                    return Endpoints.base + "StudentLocation" + "?limit=\(limit)" + "&skip=\(skipBy))"
+                case let .order(by):
+                    return Endpoints.base + "StudentLocation" + "?order=\(by)updatedAt"
+                case let .uniqueKey(id):
+                    return Endpoints.base + "StudentLocation" + "?uniqueKey=\(id)"
+                }
             }
         }
         
@@ -85,16 +115,90 @@ class UdacityClient {
         task.resume()
     }
     
+    class func sendGETRequest<ResponseType:Decodable>(url: URL, response: ResponseType.Type, completionHandler: @escaping(ResponseType?, Error?) -> Void){
+        
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    completionHandler(nil, error)
+                }
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            
+            do {
+                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                DispatchQueue.main.async {
+                    completionHandler(responseObject, nil)
+                }
+            }
+            catch {
+                DispatchQueue.main.async {
+                    completionHandler(nil, error)
+                }
+            }
+        }
+        task.resume()
+    }
+    
     class func login(username: String, password: String, completionHandler: @escaping (Bool, Error?) -> Void) {
         
         let body = LoginRequest(udacity: Udacity(username: username, password: password))
-        sendPOSTRequest(url: UdacityClient.Endpoints.login.url, body: body, response: LoginResponse.self) { (response, error) in
+        sendPOSTRequest(url: UdacityClient.Endpoints.session.url, body: body, response: LoginResponse.self) { (response, error) in
             if let response = response {
                 Auth.sessionId = response.session.id
+                Auth.uniqueKey = response.account.key
+                print(Auth.uniqueKey)
                 completionHandler(true,nil)
             } else {
                 completionHandler(false,error)
             }
+        }
+    }
+    
+    class func logout(completionHandler: @escaping (Error?) -> Void){
+        var request = URLRequest(url: Endpoints.session.url)
+        request.httpMethod = "DELETE"
+        var xsrfCookie: HTTPCookie? = nil
+        let sharedCookieStorage = HTTPCookieStorage.shared
+        for cookie in sharedCookieStorage.cookies! {
+          if cookie.name == "XSRF-TOKEN" { xsrfCookie = cookie }
+        }
+        if let xsrfCookie = xsrfCookie {
+          request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
+        }
+        let task = URLSession.shared.dataTask(with: Endpoints.session.url) { (data, response, error) in
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 200 {
+                    Auth.sessionId = ""
+                    Auth.uniqueKey = ""
+                    Auth.objectId = ""
+                    DispatchQueue.main.async {
+                        completionHandler(nil)
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    completionHandler(error)
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    class func updateLocation(completionHandler: @escaping (Bool,Error?) -> Void ){
+        var request = URLRequest(url: Endpoints.updateLocation.url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        /*let body = StudentLocationRequest(uniqueKey: <#T##String#>, firstName: <#T##String#>, lastName: <#T##String#>, mapString: <#T##String#>, mediaURL: <#T##String#>, latitude: <#T##Double#>, longitude: <#T##Double#>)
+        let encoder = JSONEncoder()
+        request.httpBody = try! encoder.encode(body)*/
+    }
+    
+    class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
+        sendGETRequest(url: Endpoints.getUserData.url, response: StudentInformation.self) { (response, error) in
+            print("")
         }
     }
     

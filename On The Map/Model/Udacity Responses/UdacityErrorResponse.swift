@@ -9,7 +9,7 @@
 import Foundation
 
 struct UdacityErrorResponse: Codable, Error {
-    let status: String
+    let status: Int
     let message: String
     
     enum CodingKeys: String, CodingKey {
