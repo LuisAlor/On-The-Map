@@ -26,6 +26,7 @@ class UdacityClient {
         case skip(limit: String, skipBy: String)
         case order(by: String)
         case uniqueKey(id: String)
+        case limitAndOrder(limit: String, order:String)
     }
     
     enum Endpoints {
@@ -58,6 +59,8 @@ class UdacityClient {
                     return Endpoints.base + "StudentLocation" + "?order=\(by)updatedAt"
                 case let .uniqueKey(id):
                     return Endpoints.base + "StudentLocation" + "?uniqueKey=\(id)"
+                case let .limitAndOrder(limit, order):
+                    return Endpoints.base + "StudentLocation" + "?limit=\(limit)" + "&order=\(order)updatedAt"
                 }
             }
         }
@@ -180,6 +183,8 @@ class UdacityClient {
                     Auth.sessionId = ""
                     Auth.uniqueKey = ""
                     Auth.objectId = ""
+                    userInfo.firstName = ""
+                    userInfo.lastName = ""
                     DispatchQueue.main.async {
                         completionHandler(nil)
                     }
@@ -193,13 +198,25 @@ class UdacityClient {
         task.resume()
     }
     
-    class func updateLocation(completionHandler: @escaping (Bool,Error?) -> Void ){
+    class func updateLocation(mapString: String, mediaURL: String, coordinates:(latitude:Double,longitude:Double), completionHandler: @escaping (Bool,Error?) -> Void ){
         var request = URLRequest(url: Endpoints.updateLocation.url)
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        /*let body = StudentLocationRequest(uniqueKey: <#T##String#>, firstName: <#T##String#>, lastName: <#T##String#>, mapString: <#T##String#>, mediaURL: <#T##String#>, latitude: <#T##Double#>, longitude: <#T##Double#>)
+        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
         let encoder = JSONEncoder()
-        request.httpBody = try! encoder.encode(body)*/
+        request.httpBody = try! encoder.encode(body)
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let response = response as? HTTPURLResponse{
+                if response.statusCode == 200 {
+                    DispatchQueue.main.async {
+                        completionHandler(true, nil)
+                    }
+                }else {
+                    completionHandler(false, error)
+                }
+            }
+        }
+        task.resume()
     }
     
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
@@ -211,6 +228,30 @@ class UdacityClient {
                 completionHandler(true, nil)
             } else {
                 completionHandler(false, error)
+            }
+        }
+    }
+    
+    class func createStudentLocation(mapString: String, mediaURL: String, coordinates:(latitude:Double,longitude:Double) , completionHandler: @escaping (Bool, Error?) -> Void){
+        
+        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
+        
+        sendPOSTRequest(url: Endpoints.createNewLocation.url, body: body, response: CreateStudentLocationResponse.self) { (response, error) in
+            if let response = response {
+                Auth.objectId = response.objectId
+                completionHandler(true, nil)
+            }else {
+                completionHandler(false, error)
+            }
+        }
+    }
+    
+    class func getStudentsLocationData(completionHandler: @escaping ([StudentInformation], Error?) -> Void) {
+        sendGETRequest(url: Endpoints.getStudentsLocation(by: .limitAndOrder(limit: "100", order: "-")).url, response: StudentLocationResponse.self) { (response, error) in
+            if let response = response {
+                completionHandler(response.results, nil)
+            }else {
+                completionHandler([], error)
             }
         }
     }
