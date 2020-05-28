@@ -14,6 +14,9 @@ class UdacityClient {
         static var sessionId = ""
         static var objectId = ""
         static var uniqueKey = ""
+    }
+    
+    struct userInfo {
         static var firstName = ""
         static var lastName = ""
     }
@@ -177,7 +180,6 @@ class UdacityClient {
                     Auth.sessionId = ""
                     Auth.uniqueKey = ""
                     Auth.objectId = ""
-                    print(Auth.uniqueKey)
                     DispatchQueue.main.async {
                         completionHandler(nil)
                     }
@@ -203,7 +205,9 @@ class UdacityClient {
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
         sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self) { (response, error) in
             if let response = response {
-                print(response)
+                userInfo.firstName = response.user.firstName
+                userInfo.lastName = response.user.lastName
+                print(userInfo.firstName)
                 completionHandler(true, nil)
             } else {
                 completionHandler(false, error)
