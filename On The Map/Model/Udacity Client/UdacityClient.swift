@@ -203,15 +203,14 @@ class UdacityClient {
     }
     
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
+        print(Endpoints.getUserData.url)
         sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self) { (response, error) in
             if let response = response {
-                userInfo.firstName = response.user.firstName
-                userInfo.lastName = response.user.lastName
-                print(userInfo.firstName)
+                userInfo.firstName = response.firstName
+                userInfo.lastName = response.lastName
                 completionHandler(true, nil)
             } else {
                 completionHandler(false, error)
-                print(error ?? "")
             }
         }
     }
