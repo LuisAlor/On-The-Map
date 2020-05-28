@@ -9,5 +9,5 @@
 import Foundation
 
 struct UserDataResponse: Codable {
-    let user: String
+    let user: [UserData]
 }

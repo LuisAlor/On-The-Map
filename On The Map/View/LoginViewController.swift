@@ -23,6 +23,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func login(_ sender: Any) {
         UdacityClient.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { (success, error) in
             if success{
+                UdacityClient.getUserData { (success, error) in
+                    if success{
+                        print("Successful")
+                    }
+                }
                 self.performSegue(withIdentifier: "completeLogin", sender: nil)
             }
             else {

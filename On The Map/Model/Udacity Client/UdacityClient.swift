@@ -14,6 +14,8 @@ class UdacityClient {
         static var sessionId = ""
         static var objectId = ""
         static var uniqueKey = ""
+        static var firstName = ""
+        static var lastName = ""
     }
     
     enum sortStudentLocation{
@@ -72,6 +74,7 @@ class UdacityClient {
     class func sendPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, response:ResponseType.Type, completionHandler: @escaping (ResponseType?, Error?)-> Void ){
         
         var request = URLRequest(url: url)
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpMethod = "POST"
         let encoder = JSONEncoder()
@@ -125,10 +128,11 @@ class UdacityClient {
                 return
             }
             
+            let filteredData = removeSecurityChars(data)
             let decoder = JSONDecoder()
             
             do {
-                let responseObject = try decoder.decode(ResponseType.self, from: data)
+                let responseObject = try decoder.decode(ResponseType.self, from: filteredData)
                 DispatchQueue.main.async {
                     completionHandler(responseObject, nil)
                 }
@@ -149,7 +153,6 @@ class UdacityClient {
             if let response = response {
                 Auth.sessionId = response.session.id
                 Auth.uniqueKey = response.account.key
-                print(Auth.uniqueKey)
                 completionHandler(true,nil)
             } else {
                 completionHandler(false,error)
@@ -174,6 +177,7 @@ class UdacityClient {
                     Auth.sessionId = ""
                     Auth.uniqueKey = ""
                     Auth.objectId = ""
+                    print(Auth.uniqueKey)
                     DispatchQueue.main.async {
                         completionHandler(nil)
                     }
@@ -197,8 +201,14 @@ class UdacityClient {
     }
     
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
-        sendGETRequest(url: Endpoints.getUserData.url, response: StudentInformation.self) { (response, error) in
-            print("")
+        sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self) { (response, error) in
+            if let response = response {
+                print(response)
+                completionHandler(true, nil)
+            } else {
+                completionHandler(false, error)
+                print(error ?? "")
+            }
         }
     }
     
