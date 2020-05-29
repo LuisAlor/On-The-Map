@@ -9,8 +9,7 @@
 import Foundation
 
 struct StudentsLocation {
+
+    static var data = [StudentInformation]()
     
-    let data = [StudentInformation]()
-    
-    static var studentsLocationData = [StudentsLocation]()
 }

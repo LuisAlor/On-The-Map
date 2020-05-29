@@ -61,7 +61,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if error != nil {
             self.showAlert(ofType: .retrieveUsersLocationFailed, message: error?.localizedDescription ?? "")
         } else {
-            print(data)
+            StudentsLocation.data = data
         }
     }
     
