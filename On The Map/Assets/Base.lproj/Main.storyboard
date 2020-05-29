@@ -206,6 +206,9 @@
                         <viewLayoutGuide key="safeArea" id="1ys-X6-85Q"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="icon_listview-selected" selectedImage="icon_listview-deselected" id="Krh-gL-BW8"/>
+                    <connections>
+                        <outlet property="tableView" destination="b9V-BO-cNV" id="D7W-1m-pE1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5pe-qi-zHe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

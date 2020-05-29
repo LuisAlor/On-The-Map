@@ -68,9 +68,9 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     // to the URL specified in the annotationViews subtitle property.
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
-                if let mediaURL = view.annotation?.subtitle! {
-                    UIApplication.shared.open(URL(string: mediaURL)!)
-                }
+            if let mediaURL = view.annotation?.subtitle! {
+                UIApplication.shared.open(URL(string: mediaURL)!)
+            }
         }
     }
 }
