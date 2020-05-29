@@ -38,6 +38,7 @@ class UdacityClient {
         case updateLocation
         case createNewLocation
         case getStudentsLocation(by: sortStudentLocation)
+        case signUp
         
         var stringURL: String {
             switch self {
@@ -62,6 +63,8 @@ class UdacityClient {
                 case let .limitAndOrder(limit, order):
                     return Endpoints.base + "StudentLocation" + "?limit=\(limit)" + "&order=\(order)updatedAt"
                 }
+            case .signUp:
+                return "https://auth.udacity.com/sign-up"
             }
         }
         
@@ -220,7 +223,6 @@ class UdacityClient {
     }
     
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
-        print(Endpoints.getUserData.url)
         sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self) { (response, error) in
             if let response = response {
                 userInfo.firstName = response.firstName

@@ -18,25 +18,28 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.usernameTextField.delegate = self
         self.passwordTextField.delegate = self
+        usernameTextField.text = ""
+        passwordTextField.text = ""
     }
 
     @IBAction func login(_ sender: Any) {
         UdacityClient.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { (success, error) in
             if success{
                 UdacityClient.getUserData { (success, error) in
-                    if success{
-                        print("Successful")
+                    if !success{
+                        self.showAlert(ofType: .retrieveUserDataFailed, message: error?.localizedDescription ?? "")
                     }
                 }
                 self.performSegue(withIdentifier: "completeLogin", sender: nil)
             }
             else {
-                self.showLoginFailure(message: error?.localizedDescription ?? "")
+                self.showAlert(ofType: .loginFailed, message: error?.localizedDescription ?? "")
             }
         }
     }
     
     @IBAction func signUp(_ sender: Any) {
+        UIApplication.shared.open(UdacityClient.Endpoints.signUp.url, options: [:], completionHandler: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -44,10 +47,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-    func showLoginFailure(message: String){
-           let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
-           alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-           show(alertVC, sender: nil)
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+        show(alertVC,sender: nil)
+
     }
     
 }
