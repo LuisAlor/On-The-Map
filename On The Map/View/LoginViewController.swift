@@ -38,7 +38,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         show(alertVC,sender: nil)
-
     }
     
     func handleLoginResponse(success:Bool, error:Error?){

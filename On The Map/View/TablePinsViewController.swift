@@ -22,6 +22,12 @@ class TablePinsViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
+    
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+        show(alertVC,sender: nil)
+    }
 
 }
 
@@ -45,15 +51,12 @@ extension TablePinsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+                
         let mediaURL = StudentsLocation.data[indexPath.row].mediaURL
-        let alternativeURL = URL(string: "https://google.com")!
         tableView.deselectRow(at: indexPath, animated: true)
-       
+        
         if let mediaURL = URL(string: mediaURL){
             UIApplication.shared.open(mediaURL, options: [:], completionHandler: nil)
-        }else{
-            UIApplication.shared.open(alternativeURL, options: [:], completionHandler: nil)
         }
     }
 }

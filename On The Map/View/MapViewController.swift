@@ -9,12 +9,14 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController,MKMapViewDelegate {
+class MapViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.mapView.delegate = self
         
         var annotations = [MKPointAnnotation]()
         
@@ -42,6 +44,15 @@ class MapViewController: UIViewController,MKMapViewDelegate {
         // When the array is complete, add the annotations to the map.
         self.mapView.addAnnotations(annotations)
     }
+    
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+        show(alertVC,sender: nil)
+    }
+}
+
+extension MapViewController: MKMapViewDelegate{
        
     // MARK: - MKMapViewDelegate
 
@@ -69,7 +80,13 @@ class MapViewController: UIViewController,MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             if let mediaURL = view.annotation?.subtitle! {
-                UIApplication.shared.open(URL(string: mediaURL)!)
+                if mediaURL.contains("https") {
+                    UIApplication.shared.open(URL(string: mediaURL)!)
+                }else{
+                    showAlert(ofType: .incorrectURLFormat, message: "Media contains a wrong URL format")
+                }
+            } else {
+                showAlert(ofType: .emptyMediaURL, message: "The user didn't provide an URL")
             }
         }
     }

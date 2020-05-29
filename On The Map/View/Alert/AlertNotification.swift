@@ -19,6 +19,8 @@ class AlertNotification{
         case loginFailed
         case retrieveUserDataFailed
         case retrieveUsersLocationFailed
+        case incorrectURLFormat
+        case emptyMediaURL
 
         var getTitles: Titles{
             switch self {
@@ -28,6 +30,10 @@ class AlertNotification{
                 return Titles(ofController: "Get User Info Failed", ofAction: "Ok")
             case .retrieveUsersLocationFailed:
                 return Titles(ofController: "Get Users Location Failed", ofAction: "Ok")
+            case .incorrectURLFormat:
+                return Titles(ofController: "Failed to open URL", ofAction: "Ok")
+            case .emptyMediaURL:
+                return Titles(ofController: "Blank URL Field", ofAction: "Ok")
             }
         }
     }
