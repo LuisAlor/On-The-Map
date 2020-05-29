@@ -13,7 +13,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.usernameTextField.delegate = self
@@ -23,19 +22,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func login(_ sender: Any) {
-        UdacityClient.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "") { (success, error) in
-            if success{
-                UdacityClient.getUserData { (success, error) in
-                    if !success{
-                        self.showAlert(ofType: .retrieveUserDataFailed, message: error?.localizedDescription ?? "")
-                    }
-                }
-                self.performSegue(withIdentifier: "completeLogin", sender: nil)
-            }
-            else {
-                self.showAlert(ofType: .loginFailed, message: error?.localizedDescription ?? "")
-            }
-        }
+        UdacityClient.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "", completionHandler: handleLoginResponse(success:error:))
     }
     
     @IBAction func signUp(_ sender: Any) {
@@ -52,6 +39,30 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         show(alertVC,sender: nil)
 
+    }
+    
+    func handleLoginResponse(success:Bool, error:Error?){
+        if success {
+            UdacityClient.getUserData(completionHandler: handleGetUserData(success:error:))
+            UdacityClient.getStudentsLocationData(completionHandler: handleStudentsLocationData(data:error:))
+            self.performSegue(withIdentifier: "completeLogin", sender: nil)
+        } else {
+            self.showAlert(ofType: .loginFailed, message: error?.localizedDescription ?? "")
+        }
+    }
+    
+    func handleGetUserData(success: Bool, error: Error?){
+        if !success {
+            self.showAlert(ofType: .retrieveUserDataFailed, message: error?.localizedDescription ?? "")
+        }
+    }
+    
+    func handleStudentsLocationData(data: [StudentInformation], error: Error? ){
+        if error != nil {
+            self.showAlert(ofType: .retrieveUsersLocationFailed, message: error?.localizedDescription ?? "")
+        } else {
+            print(data)
+        }
     }
     
 }

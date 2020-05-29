@@ -29,6 +29,11 @@ class UdacityClient {
         case limitAndOrder(limit: String, order:String)
     }
     
+    enum getType {
+        case encodedResponse
+        case noEncodedResponse
+    }
+    
     enum Endpoints {
         
         static let base = "https://onthemap-api.udacity.com/v1/"
@@ -127,7 +132,7 @@ class UdacityClient {
         task.resume()
     }
     
-    class func sendGETRequest<ResponseType:Decodable>(url: URL, response: ResponseType.Type, completionHandler: @escaping(ResponseType?, Error?) -> Void){
+    class func sendGETRequest<ResponseType:Decodable>(url: URL, response: ResponseType.Type, getType: getType, completionHandler: @escaping(ResponseType?, Error?) -> Void){
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else {
@@ -137,17 +142,26 @@ class UdacityClient {
                 return
             }
             
-            let filteredData = removeSecurityChars(data)
+            var checkedData: Data {
+                switch getType {
+                case .encodedResponse:
+                    return removeSecurityChars(data)
+                case .noEncodedResponse:
+                    return data
+                }
+            }
+            
             let decoder = JSONDecoder()
             
             do {
-                let responseObject = try decoder.decode(ResponseType.self, from: filteredData)
+                let responseObject = try decoder.decode(ResponseType.self, from: checkedData)
                 DispatchQueue.main.async {
                     completionHandler(responseObject, nil)
                 }
             }
             catch {
                 DispatchQueue.main.async {
+                    print("Error: \(error)")
                     completionHandler(nil, error)
                 }
             }
@@ -223,7 +237,7 @@ class UdacityClient {
     }
     
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
-        sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self) { (response, error) in
+        sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self, getType: .encodedResponse) { (response, error) in
             if let response = response {
                 userInfo.firstName = response.firstName
                 userInfo.lastName = response.lastName
@@ -249,7 +263,7 @@ class UdacityClient {
     }
     
     class func getStudentsLocationData(completionHandler: @escaping ([StudentInformation], Error?) -> Void) {
-        sendGETRequest(url: Endpoints.getStudentsLocation(by: .limitAndOrder(limit: "100", order: "-")).url, response: StudentLocationResponse.self) { (response, error) in
+        sendGETRequest(url: Endpoints.getStudentsLocation(by: .limitAndOrder(limit: "100", order: "-")).url, response: StudentLocationResponse.self, getType: .noEncodedResponse) { (response, error) in
             if let response = response {
                 completionHandler(response.results, nil)
             }else {

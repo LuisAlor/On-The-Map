@@ -233,6 +233,9 @@
                         <viewLayoutGuide key="safeArea" id="IQ8-ch-PhE"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="" image="icon_mapview-selected" selectedImage="icon_mapview-deselected" id="JgK-Ii-bek"/>
+                    <connections>
+                        <outlet property="mapView" destination="g8S-AV-K41" id="vvh-Te-NRr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kUE-da-MAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

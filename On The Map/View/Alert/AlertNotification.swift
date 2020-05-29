@@ -18,13 +18,16 @@ class AlertNotification{
     enum ofType {
         case loginFailed
         case retrieveUserDataFailed
+        case retrieveUsersLocationFailed
 
         var getTitles: Titles{
             switch self {
             case .loginFailed:
                 return Titles(ofController: "Login Failed", ofAction: "Ok")
             case .retrieveUserDataFailed:
-                return Titles(ofController: "Retrieving Data Failed", ofAction: "Ok")
+                return Titles(ofController: "Get User Info Failed", ofAction: "Ok")
+            case .retrieveUsersLocationFailed:
+                return Titles(ofController: "Get Users Location Failed", ofAction: "Ok")
             }
         }
     }
