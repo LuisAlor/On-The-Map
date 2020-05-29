@@ -45,7 +45,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         if success {
             UdacityClient.getUserData(completionHandler: handleGetUserData(success:error:))
             UdacityClient.getStudentsLocationData(completionHandler: handleStudentsLocationData(data:error:))
-            self.performSegue(withIdentifier: "completeLogin", sender: nil)
         } else {
             self.showAlert(ofType: .loginFailed, message: error?.localizedDescription ?? "")
         }
@@ -60,8 +59,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     func handleStudentsLocationData(data: [StudentInformation], error: Error? ){
         if error != nil {
             self.showAlert(ofType: .retrieveUsersLocationFailed, message: error?.localizedDescription ?? "")
-        } else {
+        } else{
             StudentsLocation.data = data
+            self.performSegue(withIdentifier: "completeLogin", sender: nil)
         }
     }
     
