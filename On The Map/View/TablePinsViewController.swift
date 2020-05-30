@@ -26,7 +26,7 @@ class TablePinsViewController: UIViewController {
     func showAlert(ofType type: AlertNotification.ofType, message: String){
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
-        show(alertVC,sender: nil)
+        present(alertVC, animated: true)
     }
 
 }
@@ -55,8 +55,12 @@ extension TablePinsViewController: UITableViewDataSource, UITableViewDelegate {
         let mediaURL = StudentsLocation.data[indexPath.row].mediaURL
         tableView.deselectRow(at: indexPath, animated: true)
         
-        if let mediaURL = URL(string: mediaURL){
-            UIApplication.shared.open(mediaURL, options: [:], completionHandler: nil)
+        if mediaURL.contains("https"){
+            if let mediaURL = URL(string: mediaURL){
+                UIApplication.shared.open(mediaURL, options: [:], completionHandler: nil)
+            }
+        } else {
+            showAlert(ofType: .incorrectURLFormat, message: "Media contains a wrong URL format")
         }
     }
 }

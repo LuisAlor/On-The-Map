@@ -48,7 +48,7 @@ class MapViewController: UIViewController {
     func showAlert(ofType type: AlertNotification.ofType, message: String){
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
-        show(alertVC,sender: nil)
+        present(alertVC, animated: true)
     }
 }
 
@@ -80,13 +80,13 @@ extension MapViewController: MKMapViewDelegate{
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
             if let mediaURL = view.annotation?.subtitle! {
-                if mediaURL.contains("https") {
-                    UIApplication.shared.open(URL(string: mediaURL)!)
-                }else{
+                if mediaURL.contains("https"){
+                    if let mediaURL = URL(string: mediaURL){
+                        UIApplication.shared.open(mediaURL, options: [:], completionHandler: nil)
+                    }
+                } else {
                     showAlert(ofType: .incorrectURLFormat, message: "Media contains a wrong URL format")
                 }
-            } else {
-                showAlert(ofType: .emptyMediaURL, message: "The user didn't provide an URL")
             }
         }
     }
