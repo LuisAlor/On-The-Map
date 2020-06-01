@@ -10,9 +10,18 @@ import UIKit
 
 class InfoPostingViewController: UIViewController {
 
+    @IBOutlet weak var locationTextField: UITextField!
+    @IBOutlet weak var mediaURLTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
     }    
 
+    @IBAction func dismissView(_ sender: Any) {
+    }
+    
+    @IBAction func findLocation(_ sender: Any) {
+    }
+    
 }

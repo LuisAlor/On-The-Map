@@ -147,6 +147,9 @@
                                             <constraint firstAttribute="height" constant="30" id="GJM-Ss-tIG"/>
                                         </constraints>
                                         <state key="normal" title="FIND LOCATION"/>
+                                        <connections>
+                                            <action selector="findLocation:" destination="GFf-vC-NiQ" eventType="touchUpInside" id="SMT-wp-go3"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                             </stackView>
@@ -166,8 +169,15 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="CANCEL"/>
                             </button>
+                            <connections>
+                                <action selector="dismissView:" destination="GFf-vC-NiQ" id="dXh-OK-Ame"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="locationTextField" destination="C9h-bx-RBL" id="uXx-Nu-96y"/>
+                        <outlet property="mediaURLTextField" destination="mvN-jU-mxb" id="q2Z-wy-6vl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mal-nO-BOF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -264,7 +274,7 @@
         <!--On The Map-->
         <scene sceneID="v2h-CE-tgJ">
             <objects>
-                <tabBarController modalPresentationStyle="fullScreen" id="EHh-Oj-USA" sceneMemberID="viewController">
+                <tabBarController modalPresentationStyle="fullScreen" id="EHh-Oj-USA" customClass="TabBarViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" title="On The Map" id="0bJ-sc-8uy">
                         <barButtonItem key="leftBarButtonItem" id="wRr-rp-f19">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="PDx-lk-hpq">
@@ -272,6 +282,9 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="LOGOUT"/>
                             </button>
+                            <connections>
+                                <action selector="logout:" destination="EHh-Oj-USA" id="Lww-MI-5Me"/>
+                            </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem title="Item" id="i3Y-qe-956">
@@ -283,6 +296,9 @@
                                         <segue destination="eku-Yo-lSI" kind="presentation" id="edw-Qi-rne"/>
                                     </connections>
                                 </button>
+                                <connections>
+                                    <action selector="addLocation:" destination="EHh-Oj-USA" id="qgc-uu-MBQ"/>
+                                </connections>
                             </barButtonItem>
                             <barButtonItem id="oY4-ey-aFH">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oT5-Sr-ecz">
@@ -290,6 +306,9 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="icon_refresh"/>
                                 </button>
+                                <connections>
+                                    <action selector="refreshLocationData:" destination="EHh-Oj-USA" id="kud-lU-hse"/>
+                                </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
