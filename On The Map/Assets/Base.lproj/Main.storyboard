@@ -106,7 +106,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2Os-ou-APe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="776" y="838"/>
+            <point key="canvasLocation" x="1067" y="1095"/>
         </scene>
         <!--Add Location-->
         <scene sceneID="YG0-zo-lwi">
@@ -177,11 +177,52 @@
                     <connections>
                         <outlet property="locationTextField" destination="C9h-bx-RBL" id="uXx-Nu-96y"/>
                         <outlet property="mediaURLTextField" destination="mvN-jU-mxb" id="q2Z-wy-6vl"/>
+                        <segue destination="91v-bQ-oIx" kind="show" identifier="addLocationSegue" id="Gs4-ye-BEV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mal-nO-BOF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1557.9710144927537" y="837.72321428571422"/>
+            <point key="canvasLocation" x="1886" y="1095"/>
+        </scene>
+        <!--Add Location-->
+        <scene sceneID="EFN-Qa-W4z">
+            <objects>
+                <viewController id="91v-bQ-oIx" customClass="AddLocationViewController" customModule="On_The_Map" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="bCg-Rg-ENw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Dgc-08-eOM">
+                                <rect key="frame" x="0.0" y="56" width="414" height="786"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l8o-ue-CBA">
+                                <rect key="frame" x="168.5" y="751" width="77" height="42"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                <state key="normal" title="FINISH"/>
+                                <connections>
+                                    <action selector="submitLocation:" destination="91v-bQ-oIx" eventType="touchUpInside" id="bjZ-IX-mqd"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="15i-KN-UbC" firstAttribute="bottom" secondItem="l8o-ue-CBA" secondAttribute="bottom" constant="15" id="6uA-It-liW"/>
+                            <constraint firstItem="Dgc-08-eOM" firstAttribute="leading" secondItem="15i-KN-UbC" secondAttribute="leading" id="ADY-VU-QKm"/>
+                            <constraint firstItem="l8o-ue-CBA" firstAttribute="centerX" secondItem="bCg-Rg-ENw" secondAttribute="centerX" id="Jqw-p8-iRK"/>
+                            <constraint firstItem="Dgc-08-eOM" firstAttribute="top" secondItem="15i-KN-UbC" secondAttribute="top" id="Tzs-ID-UIM"/>
+                            <constraint firstItem="Dgc-08-eOM" firstAttribute="trailing" secondItem="15i-KN-UbC" secondAttribute="trailing" id="htn-3w-Lg4"/>
+                            <constraint firstAttribute="bottom" secondItem="Dgc-08-eOM" secondAttribute="bottom" id="vPf-2s-fxO"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="15i-KN-UbC"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Add Location" id="XX0-fZ-ULm"/>
+                    <connections>
+                        <outlet property="mapView" destination="Dgc-08-eOM" id="Kme-b8-rrb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aYj-GJ-xbV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2716" y="1095"/>
         </scene>
         <!--Table Pins View Controller-->
         <scene sceneID="RxU-7R-64V">
