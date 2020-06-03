@@ -15,6 +15,9 @@ class InfoPostingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.locationTextField.text = ""
+        self.mediaURLTextField.text = ""
 
     }
     
@@ -23,6 +26,17 @@ class InfoPostingViewController: UIViewController {
     }
     
     @IBAction func findLocation(_ sender: Any) {
+        if self.locationTextField.text != "" && self.mediaURLTextField.text != "" {
+            performSegue(withIdentifier: "addLocationSegue", sender: nil)
+        }else{
+            showAlert(ofType: .emptyFields, message: "Some of the fields are still empty")
+        }
+    }
+    
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+           let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+           alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+           present(alertVC, animated: true)
     }
     
 }
