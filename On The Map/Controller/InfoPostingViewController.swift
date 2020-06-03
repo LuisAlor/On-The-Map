@@ -18,6 +18,8 @@ class InfoPostingViewController: UIViewController {
         
         self.locationTextField.text = ""
         self.mediaURLTextField.text = ""
+        self.locationTextField.delegate = self
+        self.mediaURLTextField.delegate = self
 
     }
     
