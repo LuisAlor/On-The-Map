@@ -13,6 +13,8 @@ class InfoPostingViewController: UIViewController {
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var mediaURLTextField: UITextField!
     
+    var studentInfo : StudentLocationRequest!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,6 +34,13 @@ class InfoPostingViewController: UIViewController {
             performSegue(withIdentifier: "addLocationSegue", sender: nil)
         }else{
             showAlert(ofType: .emptyFields, message: "Some of the fields are still empty")
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "addLocationSegue"{
+            let controller = segue.destination as! AddLocationViewController
+            controller.studentInfo = StudentLocationRequest(uniqueKey: UdacityClient.Auth.uniqueKey, firstName: UdacityClient.userInfo.firstName, lastName: UdacityClient.userInfo.lastName, mapString: locationTextField?.text ?? "", mediaURL: mediaURLTextField?.text ?? "", latitude: 20, longitude: 20)
         }
     }
     
