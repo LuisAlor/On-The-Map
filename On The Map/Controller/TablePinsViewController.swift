@@ -30,7 +30,9 @@ class TablePinsViewController: UIViewController {
     }
     
     public func refresh(){
-        tableView.reloadData()
+        if let tableView = tableView{
+            tableView.reloadData()
+        }
     }
 
 }

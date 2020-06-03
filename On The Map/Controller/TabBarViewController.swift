@@ -35,11 +35,19 @@ class TabBarViewController: UITabBarController {
             StudentsLocation.data = location
         }
         
+        /*
         for childViewController in self.children {
             if let mapViewController = childViewController as? MapViewController {
                 mapViewController.refresh()
             }
-            else if let tableViewController = childViewController as? TablePinsViewController {
+            
+        }
+     */
+        
+        for childViewController in self.children {
+            if let mapViewController = childViewController as? MapViewController{
+                mapViewController.refresh()
+            }else if let tableViewController = childViewController as? TablePinsViewController{
                 tableViewController.refresh()
             }
         }

@@ -40,3 +40,10 @@ class InfoPostingViewController: UIViewController {
     }
     
 }
+
+extension InfoPostingViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+}
