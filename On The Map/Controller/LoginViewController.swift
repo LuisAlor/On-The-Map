@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
@@ -27,11 +27,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func signUp(_ sender: Any) {
         UIApplication.shared.open(UdacityClient.Endpoints.signUp.url, options: [:], completionHandler: nil)
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
     
     func showAlert(ofType type: AlertNotification.ofType, message: String){
@@ -64,5 +59,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+}
+
+extension LoginViewController: UITextFieldDelegate{
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
 

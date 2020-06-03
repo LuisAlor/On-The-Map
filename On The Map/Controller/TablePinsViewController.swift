@@ -28,6 +28,10 @@ class TablePinsViewController: UIViewController {
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
     }
+    
+    public func refresh(){
+        tableView.reloadData()
+    }
 
 }
 

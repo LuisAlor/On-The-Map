@@ -12,7 +12,7 @@ class TabBarViewController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
     }
     @IBAction func refreshLocation(_ sender: Any) {
         UdacityClient.getStudentsLocationData(completionHandler: handleRefreshStudentsLocation(location:error:))
@@ -34,6 +34,16 @@ class TabBarViewController: UITabBarController {
         }else {
             StudentsLocation.data = location
         }
+        
+        for childViewController in self.children {
+            if let mapViewController = childViewController as? MapViewController {
+                mapViewController.refresh()
+            }
+            else if let tableViewController = childViewController as? TablePinsViewController {
+                tableViewController.refresh()
+            }
+        }
+        
     }
     
     func showAlert(ofType type: AlertNotification.ofType, message: String){

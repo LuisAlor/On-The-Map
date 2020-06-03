@@ -17,38 +17,48 @@ class MapViewController: UIViewController {
         super.viewDidLoad()
         
         self.mapView.delegate = self
-        
-        var annotations = [MKPointAnnotation]()
-        
-        for dictionary in StudentsLocation.data {
-            
-            let lat = CLLocationDegrees(dictionary.latitude)
-            let long = CLLocationDegrees(dictionary.longitude)
-            
-            // The lat and long to create a CLLocationCoordinates2D instance.
-            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-            
-            let first = dictionary.firstName
-            let last = dictionary.lastName
-            let mediaURL = dictionary.mediaURL
-            
-            // Here we create the annotation and set its coordiate, title, and subtitle properties
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            annotation.title = "\(first) \(last)"
-            annotation.subtitle = mediaURL
-            
-            // Place the annotation in an array of annotations.
-            annotations.append(annotation)
-        }
-        // When the array is complete, add the annotations to the map.
-        self.mapView.addAnnotations(annotations)
+        generateAnnotations()
+
     }
     
     func showAlert(ofType type: AlertNotification.ofType, message: String){
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
+    }
+    
+    public func refresh(){
+        self.mapView.removeAnnotations(mapView.annotations)
+        generateAnnotations()
+    }
+    
+    func generateAnnotations(){
+        
+        var annotations = [MKPointAnnotation]()
+               
+        for dictionary in StudentsLocation.data {
+           
+            let lat = CLLocationDegrees(dictionary.latitude)
+            let long = CLLocationDegrees(dictionary.longitude)
+           
+            // The lat and long to create a CLLocationCoordinates2D instance.
+            let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
+           
+            let first = dictionary.firstName
+            let last = dictionary.lastName
+            let mediaURL = dictionary.mediaURL
+           
+            // Here we create the annotation and set its coordiate, title, and subtitle properties
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            annotation.title = "\(first) \(last)"
+            annotation.subtitle = mediaURL
+           
+            // Place the annotation in an array of annotations.
+            annotations.append(annotation)
+        }
+        // When the array is complete, add the annotations to the map.
+        self.mapView.addAnnotations(annotations)
     }
 }
 
