@@ -22,5 +22,14 @@ class TabBarViewController: UITabBarController {
     }
     
     @IBAction func logout(_ sender: Any) {
+        UdacityClient.logout(completionHandler: handleLogout(error:))
+    }
+    
+    func handleLogout(error: Error?){
+        if let error = error{
+            print("\(error.localizedDescription)")
+        }else{
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 }

@@ -19,6 +19,7 @@ class InfoPostingViewController: UIViewController {
     }    
 
     @IBAction func dismissView(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func findLocation(_ sender: Any) {
