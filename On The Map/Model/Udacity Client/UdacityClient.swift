@@ -195,6 +195,7 @@ class UdacityClient {
           request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
         }
         let task = URLSession.shared.dataTask(with: Endpoints.session.url) { (data, response, error) in
+            
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
                     Auth.sessionId = ""

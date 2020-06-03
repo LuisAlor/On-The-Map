@@ -29,8 +29,7 @@ class TabBarViewController: UITabBarController {
         if let error = error{
             print("\(error.localizedDescription)")
         }else{
-            print("Im here")
-            self.dismiss(animated: true, completion: nil)
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
 }
