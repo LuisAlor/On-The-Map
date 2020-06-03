@@ -26,10 +26,9 @@ class TabBarViewController: UITabBarController {
     }
     
     func handleLogout(error: Error?){
-        if let error = error{
-            print("\(error.localizedDescription)")
-        }else{
-            self.navigationController?.popToRootViewController(animated: true)
+        
+        if error == nil {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

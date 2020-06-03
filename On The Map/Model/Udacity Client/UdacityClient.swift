@@ -194,7 +194,7 @@ class UdacityClient {
         if let xsrfCookie = xsrfCookie {
           request.setValue(xsrfCookie.value, forHTTPHeaderField: "X-XSRF-TOKEN")
         }
-        let task = URLSession.shared.dataTask(with: Endpoints.session.url) { (data, response, error) in
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
