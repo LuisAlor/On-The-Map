@@ -40,7 +40,7 @@ class InfoPostingViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addLocationSegue"{
             let controller = segue.destination as! AddLocationViewController
-            controller.studentInfo = StudentLocationRequest(uniqueKey: UdacityClient.Auth.uniqueKey, firstName: UdacityClient.userInfo.firstName, lastName: UdacityClient.userInfo.lastName, mapString: locationTextField?.text ?? "", mediaURL: mediaURLTextField?.text ?? "", latitude: 20, longitude: 20)
+            controller.studentInfo = StudentLocationRequest(uniqueKey: UdacityClient.Auth.uniqueKey, firstName: UdacityClient.userInfo.firstName, lastName: UdacityClient.userInfo.lastName, mapString: locationTextField?.text ?? "", mediaURL: mediaURLTextField?.text ?? "", latitude: 19.4326, longitude: 99.1332)
         }
     }
     
