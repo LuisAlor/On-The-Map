@@ -16,9 +16,9 @@ class InfoPostingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-    }    
-
-    @IBAction func dismissView(_ sender: Any) {
+    }
+    
+    @IBAction func dismiss(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     

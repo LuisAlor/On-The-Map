@@ -168,10 +168,10 @@
                                 <rect key="frame" x="20" y="13" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="CANCEL"/>
+                                <connections>
+                                    <action selector="dismiss:" destination="GFf-vC-NiQ" eventType="touchUpInside" id="Dza-Tv-wru"/>
+                                </connections>
                             </button>
-                            <connections>
-                                <action selector="dismissView:" destination="GFf-vC-NiQ" id="dXh-OK-Ame"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
@@ -322,10 +322,10 @@
                                 <rect key="frame" x="20" y="13" width="92" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="LOGOUT"/>
+                                <connections>
+                                    <action selector="logout:" destination="EHh-Oj-USA" eventType="touchUpInside" id="6H2-xV-LJG"/>
+                                </connections>
                             </button>
-                            <connections>
-                                <action selector="logout:" destination="EHh-Oj-USA" id="Lww-MI-5Me"/>
-                            </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
                             <barButtonItem title="Item" id="i3Y-qe-956">
