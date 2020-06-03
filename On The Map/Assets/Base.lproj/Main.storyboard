@@ -337,19 +337,16 @@
                                         <segue destination="eku-Yo-lSI" kind="presentation" id="edw-Qi-rne"/>
                                     </connections>
                                 </button>
-                                <connections>
-                                    <action selector="addLocation:" destination="EHh-Oj-USA" id="qgc-uu-MBQ"/>
-                                </connections>
                             </barButtonItem>
                             <barButtonItem id="oY4-ey-aFH">
                                 <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="oT5-Sr-ecz">
                                     <rect key="frame" x="338" y="16" width="24" height="24"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="icon_refresh"/>
+                                    <connections>
+                                        <action selector="refreshLocation:" destination="EHh-Oj-USA" eventType="touchUpInside" id="y70-Mr-hRU"/>
+                                    </connections>
                                 </button>
-                                <connections>
-                                    <action selector="refreshLocationData:" destination="EHh-Oj-USA" id="kud-lU-hse"/>
-                                </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>

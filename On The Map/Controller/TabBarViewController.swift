@@ -14,11 +14,8 @@ class TabBarViewController: UITabBarController {
         super.viewDidLoad()
 
     }
-    
-    @IBAction func refreshLocationData(_ sender: Any) {
-    }
-    
-    @IBAction func addLocation(_ sender: Any) {
+    @IBAction func refreshLocation(_ sender: Any) {
+        UdacityClient.getStudentsLocationData(completionHandler: handleRefreshStudentsLocation(location:error:))
     }
     
     @IBAction func logout(_ sender: Any) {
@@ -26,9 +23,22 @@ class TabBarViewController: UITabBarController {
     }
     
     func handleLogout(error: Error?){
-        
         if error == nil {
             dismiss(animated: true, completion: nil)
         }
+    }
+    
+    func handleRefreshStudentsLocation(location: [StudentInformation], error: Error?){
+        if let error = error{
+            showAlert(ofType: .retrieveUsersLocationFailed, message: error.localizedDescription)
+        }else {
+            StudentsLocation.data = location
+        }
+    }
+    
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+           let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+           alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+           show(alertVC,sender: nil)
     }
 }
