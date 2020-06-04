@@ -218,13 +218,22 @@
                                     <action selector="submitLocation:" destination="91v-bQ-oIx" eventType="touchUpInside" id="bjZ-IX-mqd"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="zeX-60-Us4">
+                                <rect key="frame" x="182" y="691" width="50" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="Lxn-K7-To3"/>
+                                    <constraint firstAttribute="height" constant="50" id="S3K-jP-c7T"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="15i-KN-UbC" firstAttribute="bottom" secondItem="l8o-ue-CBA" secondAttribute="bottom" constant="15" id="6uA-It-liW"/>
                             <constraint firstItem="Dgc-08-eOM" firstAttribute="leading" secondItem="15i-KN-UbC" secondAttribute="leading" id="ADY-VU-QKm"/>
                             <constraint firstItem="l8o-ue-CBA" firstAttribute="centerX" secondItem="bCg-Rg-ENw" secondAttribute="centerX" id="Jqw-p8-iRK"/>
+                            <constraint firstItem="l8o-ue-CBA" firstAttribute="top" secondItem="zeX-60-Us4" secondAttribute="bottom" constant="10" id="PQd-Hd-BG1"/>
                             <constraint firstItem="Dgc-08-eOM" firstAttribute="top" secondItem="15i-KN-UbC" secondAttribute="top" id="Tzs-ID-UIM"/>
+                            <constraint firstItem="zeX-60-Us4" firstAttribute="centerX" secondItem="bCg-Rg-ENw" secondAttribute="centerX" id="cXh-HZ-1Dp"/>
                             <constraint firstItem="Dgc-08-eOM" firstAttribute="trailing" secondItem="15i-KN-UbC" secondAttribute="trailing" id="htn-3w-Lg4"/>
                             <constraint firstAttribute="bottom" secondItem="Dgc-08-eOM" secondAttribute="bottom" id="vPf-2s-fxO"/>
                         </constraints>
@@ -232,12 +241,14 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add Location" id="XX0-fZ-ULm"/>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="zeX-60-Us4" id="mu6-KL-0fc"/>
+                        <outlet property="finishButton" destination="l8o-ue-CBA" id="Fjz-lw-gg1"/>
                         <outlet property="mapView" destination="Dgc-08-eOM" id="Kme-b8-rrb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aYj-GJ-xbV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2716" y="1095"/>
+            <point key="canvasLocation" x="2715.9420289855075" y="1094.8660714285713"/>
         </scene>
         <!--Table Pins View Controller-->
         <scene sceneID="RxU-7R-64V">

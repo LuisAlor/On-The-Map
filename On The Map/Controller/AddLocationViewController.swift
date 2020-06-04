@@ -12,7 +12,9 @@ import MapKit
 class AddLocationViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
-
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var finishButton: UIButton!
+    
     var mapString: String!
     var mediaURL: String!
     var geoLocation: CLLocationCoordinate2D!
@@ -20,6 +22,7 @@ class AddLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.mapView.delegate = self
+        activityIndicatorView.hidesWhenStopped = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -28,6 +31,7 @@ class AddLocationViewController: UIViewController {
     }
 
     @IBAction func submitLocation(_ sender: Any) {
+        isPostingLocation(true)
         UdacityClient.createStudentLocation(mapString: mapString, mediaURL: mediaURL, coordinates: (geoLocation.latitude,   geoLocation.longitude), completionHandler: handleCreateLocationResponse(success:error:))
     }
     
@@ -63,6 +67,7 @@ class AddLocationViewController: UIViewController {
     
     func handleCreateLocationResponse(success: Bool, error: Error?){
         if success {
+            isPostingLocation(false)
             self.dismiss(animated: true, completion: nil)
         } else {
             showAlert(ofType: .createLocationFailed, message: error?.localizedDescription ?? "")
@@ -73,6 +78,16 @@ class AddLocationViewController: UIViewController {
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
+        isPostingLocation(false)
+    }
+    
+    func isPostingLocation(_ hasPosted: Bool){
+        if hasPosted{
+            activityIndicatorView.startAnimating()
+        }else{
+            activityIndicatorView.stopAnimating()
+        }
+        finishButton.isEnabled = !hasPosted
     }
 
 }

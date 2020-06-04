@@ -29,6 +29,18 @@ class InfoPostingViewController: UIViewController {
         self.mediaURLTextField.delegate = self
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        //Subscribe to any keyboard notification
+        subscribeToKeyboardNotifications()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        //Unsubscribe from any keyboard notifications when view will disappear
+        unsubscribeFromKeyboardNotifications()
+    }
+    
     @IBAction func dismiss(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
@@ -95,6 +107,52 @@ class InfoPostingViewController: UIViewController {
         }
         findLocationButton.isEnabled = !findLocation
     }
+    
+    //MARK:- KeyBoard Subscriber Notification
+   func subscribeToKeyboardNotifications() {
+       
+       //Subscribe to keyboardWillShow(_:) notifications
+       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+       //Subscribe to keyboardWillHide(_:) notifications
+       NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+   }
+   
+   //MARK: -KeyBoard Unsubscriber Notification
+   func unsubscribeFromKeyboardNotifications() {
+       
+       //Unsubscribe from keyboardWillShow(_:) notifications
+       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+       //Unsubscribe from keyboardWillShow(_:) notifications
+       NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+   }
+
+   //MARK: - keyboardWillShow Function
+   @objc func keyboardWillShow(_ notification:Notification) {
+       /*Set view y value upper for keyboard to not hide the textfield and verify that
+       it is only for the bottom textfield, if not both will push the view upper */
+       if self.mediaURLTextField.isEditing {
+           view.frame.origin.y -= getKeyboardHeight(notification)
+       }
+   }
+   
+   //MARK: - keyboardWillHide Function
+   @objc func keyboardWillHide(_ notification:Notification) {
+       //Set view y value back to origin when keyboard will be dismissed
+       //Can also be set as view.frame.origin.y = 0
+       if self.mediaURLTextField.isEditing {
+           view.frame.origin.y += getKeyboardHeight(notification)
+       }
+   }
+
+   //MARK: - getKeyboardHeight Function : Get Keyboard Height from notification
+   func getKeyboardHeight(_ notification:Notification) -> CGFloat {
+       //Get userInfo dictionary [AnyHashable : Any]?
+       let userInfo = notification.userInfo
+       // Get the keyboardSize attributes from dictionary
+       let keyboardSize = userInfo![UIResponder.keyboardFrameEndUserInfoKey] as! NSValue
+       //Return height of the keyboard
+       return keyboardSize.cgRectValue.height
+   }
     
 }
 
