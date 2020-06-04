@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="I0Y-1m-u0q">
-                                <rect key="frame" x="30" y="293" width="354" height="310"/>
+                                <rect key="frame" x="30" y="268" width="354" height="360"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo-u" translatesAutoresizingMaskIntoConstraints="NO" id="qvW-bv-n3r">
                                         <rect key="frame" x="0.0" y="0.0" width="354" height="100"/>
@@ -50,10 +50,13 @@
                                             <action selector="login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="s75-2t-Wna"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="89f-Cn-btW">
+                                        <rect key="frame" x="0.0" y="340" width="354" height="20"/>
+                                    </activityIndicatorView>
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="zzn-IZ-6Y4">
-                                <rect key="frame" x="74" y="616" width="241" height="30"/>
+                                <rect key="frame" x="74" y="641" width="241" height="30"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iu8-Kn-cSq">
                                         <rect key="frame" x="0.0" y="0.0" width="179" height="30"/>
@@ -82,7 +85,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityViewIndicatior" destination="89f-Cn-btW" id="yFl-2x-OHL"/>
+                        <outlet property="loginButton" destination="dgl-rV-qxW" id="m9F-7h-UJt"/>
                         <outlet property="passwordTextField" destination="QAU-xz-Y33" id="nJK-aE-RXn"/>
+                        <outlet property="signUpButton" destination="pso-j0-I1m" id="Df3-WM-9wN"/>
                         <outlet property="usernameTextField" destination="EVH-yu-MA8" id="pSx-64-qpd"/>
                         <segue destination="KhB-if-f1o" kind="show" identifier="completeLogin" id="gMY-my-yQw"/>
                     </connections>
@@ -117,7 +123,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="eZv-62-fzo">
-                                <rect key="frame" x="30" y="262" width="354" height="318"/>
+                                <rect key="frame" x="30" y="234" width="354" height="374"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_world" translatesAutoresizingMaskIntoConstraints="NO" id="phe-ul-nwf">
                                         <rect key="frame" x="0.0" y="0.0" width="354" height="100"/>
@@ -151,6 +157,13 @@
                                             <action selector="findLocation:" destination="GFf-vC-NiQ" eventType="touchUpInside" id="SMT-wp-go3"/>
                                         </connections>
                                     </button>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="xaA-js-JnD">
+                                        <rect key="frame" x="0.0" y="354" width="354" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="H21-mk-jvs"/>
+                                            <constraint firstAttribute="width" constant="354" id="Hkn-K4-PQ4"/>
+                                        </constraints>
+                                    </activityIndicatorView>
                                 </subviews>
                             </stackView>
                         </subviews>
@@ -175,6 +188,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="xaA-js-JnD" id="QPg-9Q-JaK"/>
+                        <outlet property="findLocationButton" destination="tmO-ua-paF" id="dar-a5-T8J"/>
                         <outlet property="locationTextField" destination="C9h-bx-RBL" id="uXx-Nu-96y"/>
                         <outlet property="mediaURLTextField" destination="mvN-jU-mxb" id="q2Z-wy-6vl"/>
                         <segue destination="91v-bQ-oIx" kind="show" identifier="addLocationSegue" id="Gs4-ye-BEV"/>

@@ -12,13 +12,14 @@ import MapKit
 class AddLocationViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
-    var studentInfo : StudentLocationRequest!
+
+    var mapString: String!
+    var mediaURL: String!
+    var geoLocation: CLLocationCoordinate2D!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
         self.mapView.delegate = self
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -27,10 +28,11 @@ class AddLocationViewController: UIViewController {
     }
 
     @IBAction func submitLocation(_ sender: Any) {
+        UdacityClient.createStudentLocation(mapString: mapString, mediaURL: mediaURL, coordinates: (geoLocation.latitude,   geoLocation.longitude), completionHandler: handleCreateLocationResponse(success:error:))
     }
     
     func centerMapOnLocation(_ location: CLLocation, mapView: MKMapView) {
-        let regionRadius: CLLocationDistance = 1000
+        let regionRadius: CLLocationDistance = 5000
         let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
                                                   latitudinalMeters: regionRadius * 2.0, longitudinalMeters: regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
@@ -40,8 +42,8 @@ class AddLocationViewController: UIViewController {
         
         var annotations = [MKPointAnnotation]()
 
-        let lat = CLLocationDegrees(studentInfo.latitude)
-        let long = CLLocationDegrees(studentInfo.longitude)
+        let lat = CLLocationDegrees(geoLocation.latitude)
+        let long = CLLocationDegrees(geoLocation.longitude)
 
         // The lat and long to create a CLLocationCoordinates2D instance.
         let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
@@ -58,6 +60,21 @@ class AddLocationViewController: UIViewController {
         
         centerMapOnLocation(CLLocation(latitude: lat, longitude: long), mapView: mapView)
     }
+    
+    func handleCreateLocationResponse(success: Bool, error: Error?){
+        if success {
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            showAlert(ofType: .createLocationFailed, message: error?.localizedDescription ?? "")
+        }
+    }
+    
+    func showAlert(ofType type: AlertNotification.ofType, message: String){
+        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
+        present(alertVC, animated: true)
+    }
+
 }
 
 extension AddLocationViewController: MKMapViewDelegate{

@@ -85,7 +85,7 @@ class UdacityClient {
         return data
     }
     
-    class func sendPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, response:ResponseType.Type, completionHandler: @escaping (ResponseType?, Error?)-> Void ){
+    class func sendPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, response:ResponseType.Type, getType: getType, completionHandler: @escaping (ResponseType?, Error?)-> Void ){
         
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -106,18 +106,26 @@ class UdacityClient {
                 return
             }
             
-            let filteredData = removeSecurityChars(data)
+            var checkedData: Data {
+                switch getType {
+                case .encodedResponse:
+                    return removeSecurityChars(data)
+                case .noEncodedResponse:
+                    return data
+                }
+            }
+            
             let decoder = JSONDecoder()
             
             do {
-                let responseAPI = try decoder.decode(ResponseType.self, from: filteredData)
+                let responseAPI = try decoder.decode(ResponseType.self, from: checkedData)
                 DispatchQueue.main.async {
                     completionHandler(responseAPI, nil)
                 }
             }
             catch {
                 do {
-                    let responseError = try decoder.decode(UdacityErrorResponse.self, from: filteredData)
+                    let responseError = try decoder.decode(UdacityErrorResponse.self, from: checkedData)
                     DispatchQueue.main.async {
                         completionHandler(nil, responseError)
                     }
@@ -172,7 +180,7 @@ class UdacityClient {
     class func login(username: String, password: String, completionHandler: @escaping (Bool, Error?) -> Void) {
         
         let body = LoginRequest(udacity: Udacity(username: username, password: password))
-        sendPOSTRequest(url: UdacityClient.Endpoints.session.url, body: body, response: LoginResponse.self) { (response, error) in
+        sendPOSTRequest(url: UdacityClient.Endpoints.session.url, body: body, response: LoginResponse.self, getType: .encodedResponse) { (response, error) in
             if let response = response {
                 Auth.sessionId = response.session.id
                 Auth.uniqueKey = response.account.key
@@ -253,7 +261,7 @@ class UdacityClient {
         
         let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
         
-        sendPOSTRequest(url: Endpoints.createNewLocation.url, body: body, response: CreateStudentLocationResponse.self) { (response, error) in
+        sendPOSTRequest(url: Endpoints.createNewLocation.url, body: body, response: CreateStudentLocationResponse.self, getType: .noEncodedResponse) { (response, error) in
             if let response = response {
                 Auth.objectId = response.objectId
                 completionHandler(true, nil)

@@ -12,16 +12,22 @@ class LoginViewController: UIViewController {
 
     @IBOutlet weak var usernameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var signUpButton: UIButton!
+    
+    @IBOutlet weak var activityViewIndicatior: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.activityViewIndicatior.hidesWhenStopped = true
         self.usernameTextField.delegate = self
         self.passwordTextField.delegate = self
-        usernameTextField.text = ""
-        passwordTextField.text = ""
+        self.usernameTextField.text = ""
+        self.passwordTextField.text = ""
     }
 
     @IBAction func login(_ sender: Any) {
+        setLogin(true)
         UdacityClient.login(username: usernameTextField.text ?? "", password: passwordTextField.text ?? "", completionHandler: handleLoginResponse(success:error:))
     }
     
@@ -33,6 +39,7 @@ class LoginViewController: UIViewController {
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         show(alertVC,sender: nil)
+        setLogin(false)
     }
     
     func handleLoginResponse(success:Bool, error:Error?){
@@ -55,10 +62,22 @@ class LoginViewController: UIViewController {
             self.showAlert(ofType: .retrieveUsersLocationFailed, message: error?.localizedDescription ?? "")
         } else{
             StudentsLocation.data = data
+            setLogin(false)
             self.performSegue(withIdentifier: "completeLogin", sender: nil)
         }
     }
     
+    func setLogin(_ isLogin: Bool){
+        if isLogin{
+            activityViewIndicatior.startAnimating()
+        }else{
+            activityViewIndicatior.stopAnimating()
+        }
+        usernameTextField.isEnabled = !isLogin
+        passwordTextField.isEnabled = !isLogin
+        loginButton.isEnabled = !isLogin
+        signUpButton.isEnabled = !isLogin
+    }
 }
 
 extension LoginViewController: UITextFieldDelegate{

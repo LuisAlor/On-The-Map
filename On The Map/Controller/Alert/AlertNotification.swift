@@ -21,6 +21,8 @@ class AlertNotification{
         case retrieveUsersLocationFailed
         case incorrectURLFormat
         case emptyFields
+        case incorrectGeoLocation
+        case createLocationFailed
 
         var getTitles: Titles{
             switch self {
@@ -34,6 +36,10 @@ class AlertNotification{
                 return Titles(ofController: "Failed to open URL", ofAction: "Ok")
             case .emptyFields:
                 return Titles(ofController: "Empty Fields", ofAction: "Ok")
+            case .incorrectGeoLocation:
+                return Titles(ofController: "Invalid Location", ofAction: "Ok")
+            case .createLocationFailed:
+                return Titles(ofController: "Submission failed", ofAction: "Ok")
             }
         }
     }
