@@ -11,27 +11,33 @@ import MapKit
 
 class MapViewController: UIViewController {
     
+    //IBOutlets
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //Set MapView's delegate
         self.mapView.delegate = self
+        //Generate the pin annotations in our mapView
         generateAnnotations()
 
     }
-    
+    //MARK: - showAlert: Create an alert with dynamic titles according to the type of error
     func showAlert(ofType type: AlertNotification.ofType, message: String){
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
     }
-    
+    //MARK: - refresh: Refresh data from new retrieved user locations
     public func refresh(){
+        //First remove all old annotations
         self.mapView.removeAnnotations(mapView.annotations)
+        //Then generate new ones from the new data
         generateAnnotations()
     }
     
+    //MARK: - generateAnnotations: Generate all the annotations from the StudentsLocation Data
     func generateAnnotations(){
         
         var annotations = [MKPointAnnotation]()
@@ -65,7 +71,6 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate{
        
     // MARK: - MKMapViewDelegate
-
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"

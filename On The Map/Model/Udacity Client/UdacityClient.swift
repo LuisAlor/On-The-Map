@@ -11,17 +11,17 @@ import Foundation
 class UdacityClient {
     
     struct Auth {
-        static var sessionId = ""
-        static var objectId = ""
-        static var uniqueKey = ""
+        static var objectId = "" //An auto-generated id/key generated which uniquely identifies a StudentLocation
+        static var uniqueKey = "" //Key used to uniquely identify a StudentLocation
     }
     
-    struct userInfo {
-        static var firstName = ""
-        static var lastName = ""
+    struct UserInfo {
+        static var firstName = "" //User First Name assign after login
+        static var lastName = "" //User Last Name assign after login
     }
     
-    enum sortStudentLocation{
+    // Sort the students location by, used to create url.
+    enum SortStudentLocation{
         case limit(by: String)
         case skip(limit: String, skipBy: String)
         case order(by: String)
@@ -29,11 +29,13 @@ class UdacityClient {
         case limitAndOrder(limit: String, order:String)
     }
     
-    enum getType {
+    // Check what type of security we should apply to our response
+    enum SecurityType {
         case encodedResponse
         case noEncodedResponse
     }
     
+    // All possible endpoints from Udacity API
     enum Endpoints {
         
         static let base = "https://onthemap-api.udacity.com/v1/"
@@ -42,7 +44,7 @@ class UdacityClient {
         case getUserData
         case updateLocation
         case createNewLocation
-        case getStudentsLocation(by: sortStudentLocation)
+        case getStudentsLocation(by: SortStudentLocation)
         case signUp
         
         var stringURL: String {
@@ -79,13 +81,21 @@ class UdacityClient {
         
     }
     
-    class func removeSecurityChars(_ data: Data) -> Data{
-        let range = 5..<data.count
-        let data = data.subdata(in: range)
-        return data
+    //MARK: - removeSecurityChars: Delete the first chars if needed
+    class func removeSecurityChars(_ data: Data, type: SecurityType) -> Data{
+        
+        switch type {
+        case .encodedResponse:
+            let range = 5..<data.count
+            let data = data.subdata(in: range)
+            return data
+        case .noEncodedResponse:
+            return data
+        }
     }
     
-    class func sendPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, response:ResponseType.Type, getType: getType, completionHandler: @escaping (ResponseType?, Error?)-> Void ){
+    //MARK: - sendPOSTRequest: Send POST Request of Generic Request Type
+    class func sendPOSTRequest<RequestType: Encodable, ResponseType: Decodable>(url: URL, body: RequestType, response:ResponseType.Type, secureType: SecurityType, completionHandler: @escaping (ResponseType?, Error?)-> Void ){
         
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -106,16 +116,8 @@ class UdacityClient {
                 return
             }
             
-            var checkedData: Data {
-                switch getType {
-                case .encodedResponse:
-                    return removeSecurityChars(data)
-                case .noEncodedResponse:
-                    return data
-                }
-            }
-            
             let decoder = JSONDecoder()
+            let checkedData = removeSecurityChars(data, type: secureType)
             
             do {
                 let responseAPI = try decoder.decode(ResponseType.self, from: checkedData)
@@ -139,8 +141,8 @@ class UdacityClient {
         }
         task.resume()
     }
-    
-    class func sendGETRequest<ResponseType:Decodable>(url: URL, response: ResponseType.Type, getType: getType, completionHandler: @escaping(ResponseType?, Error?) -> Void){
+    //MARK: - sendGETRequest: Send GET Request of Generic Type
+    class func sendGETRequest<ResponseType:Decodable>(url: URL, response: ResponseType.Type, secureType: SecurityType, completionHandler: @escaping(ResponseType?, Error?) -> Void){
         
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             guard let data = data else {
@@ -150,16 +152,8 @@ class UdacityClient {
                 return
             }
             
-            var checkedData: Data {
-                switch getType {
-                case .encodedResponse:
-                    return removeSecurityChars(data)
-                case .noEncodedResponse:
-                    return data
-                }
-            }
-            
             let decoder = JSONDecoder()
+            let checkedData = removeSecurityChars(data, type: secureType)
             
             do {
                 let responseObject = try decoder.decode(ResponseType.self, from: checkedData)
@@ -169,7 +163,6 @@ class UdacityClient {
             }
             catch {
                 DispatchQueue.main.async {
-                    print("Error: \(error)")
                     completionHandler(nil, error)
                 }
             }
@@ -177,12 +170,12 @@ class UdacityClient {
         task.resume()
     }
     
+    //MARK: - login: Send login POST request to the server
     class func login(username: String, password: String, completionHandler: @escaping (Bool, Error?) -> Void) {
         
         let body = LoginRequest(udacity: Udacity(username: username, password: password))
-        sendPOSTRequest(url: UdacityClient.Endpoints.session.url, body: body, response: LoginResponse.self, getType: .encodedResponse) { (response, error) in
+        sendPOSTRequest(url: UdacityClient.Endpoints.session.url, body: body, response: LoginResponse.self, secureType: .encodedResponse) { (response, error) in
             if let response = response {
-                Auth.sessionId = response.session.id
                 Auth.uniqueKey = response.account.key
                 completionHandler(true,nil)
             } else {
@@ -191,6 +184,7 @@ class UdacityClient {
         }
     }
     
+    //MARK: - logout: Send a logout DELETE Request to server
     class func logout(completionHandler: @escaping (Error?) -> Void){
         var request = URLRequest(url: Endpoints.session.url)
         request.httpMethod = "DELETE"
@@ -206,11 +200,10 @@ class UdacityClient {
             
             if let response = response as? HTTPURLResponse {
                 if response.statusCode == 200 {
-                    Auth.sessionId = ""
                     Auth.uniqueKey = ""
                     Auth.objectId = ""
-                    userInfo.firstName = ""
-                    userInfo.lastName = ""
+                    UserInfo.firstName = ""
+                    UserInfo.lastName = ""
                     DispatchQueue.main.async {
                         completionHandler(nil)
                     }
@@ -224,11 +217,12 @@ class UdacityClient {
         task.resume()
     }
     
+    //MARK: - updateLocation: Update the user location by PUT request
     class func updateLocation(mapString: String, mediaURL: String, coordinates:(latitude:Double,longitude:Double), completionHandler: @escaping (Bool,Error?) -> Void ){
         var request = URLRequest(url: Endpoints.updateLocation.url)
         request.httpMethod = "PUT"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
+        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: UserInfo.firstName, lastName: UserInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
         let encoder = JSONEncoder()
         request.httpBody = try! encoder.encode(body)
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
@@ -245,11 +239,12 @@ class UdacityClient {
         task.resume()
     }
     
+    //MARK: - getUserData: GET request to get a random user from Udacity servers
     class func getUserData(completionHandler: @escaping (Bool, Error?)-> Void){
-        sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self, getType: .encodedResponse) { (response, error) in
+        sendGETRequest(url: Endpoints.getUserData.url, response: UserDataResponse.self, secureType: .encodedResponse) { (response, error) in
             if let response = response {
-                userInfo.firstName = response.firstName
-                userInfo.lastName = response.lastName
+                UserInfo.firstName = response.firstName
+                UserInfo.lastName = response.lastName
                 completionHandler(true, nil)
             } else {
                 completionHandler(false, error)
@@ -257,11 +252,12 @@ class UdacityClient {
         }
     }
     
+    //MARK: - createStudentLocation: Send a POST request to create a new location
     class func createStudentLocation(mapString: String, mediaURL: String, coordinates:(latitude:Double,longitude:Double) , completionHandler: @escaping (Bool, Error?) -> Void){
         
-        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: userInfo.firstName, lastName: userInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
+        let body = StudentLocationRequest(uniqueKey: Auth.uniqueKey, firstName: UserInfo.firstName, lastName: UserInfo.lastName, mapString: mapString, mediaURL: mediaURL, latitude: coordinates.latitude, longitude: coordinates.longitude)
         
-        sendPOSTRequest(url: Endpoints.createNewLocation.url, body: body, response: CreateStudentLocationResponse.self, getType: .noEncodedResponse) { (response, error) in
+        sendPOSTRequest(url: Endpoints.createNewLocation.url, body: body, response: CreateStudentLocationResponse.self, secureType: .noEncodedResponse) { (response, error) in
             if let response = response {
                 Auth.objectId = response.objectId
                 completionHandler(true, nil)
@@ -271,8 +267,9 @@ class UdacityClient {
         }
     }
     
+    //MARK: - getStudentsLocationData: Send GET Request to download the last 100 user locations
     class func getStudentsLocationData(completionHandler: @escaping ([StudentInformation], Error?) -> Void) {
-        sendGETRequest(url: Endpoints.getStudentsLocation(by: .limitAndOrder(limit: "100", order: "-")).url, response: StudentLocationResponse.self, getType: .noEncodedResponse) { (response, error) in
+        sendGETRequest(url: Endpoints.getStudentsLocation(by: .limitAndOrder(limit: "100", order: "-")).url, response: StudentLocationResponse.self, secureType: .noEncodedResponse) { (response, error) in
             if let response = response {
                 completionHandler(response.results, nil)
             }else {

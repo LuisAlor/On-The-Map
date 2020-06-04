@@ -11,20 +11,28 @@ import MapKit
 
 class InfoPostingViewController: UIViewController {
 
+    //IBOutlets
     @IBOutlet weak var locationTextField: UITextField!
     @IBOutlet weak var mediaURLTextField: UITextField!
     @IBOutlet weak var findLocationButton: UIButton!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
+    //Properties
     var mapString: String!
     var mediaURL: String!
     var geoLocation: CLLocationCoordinate2D!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Hide activity indicatory when stops
         self.activityIndicatorView.hidesWhenStopped = true
+       
+        //Set textfields to empty
         self.locationTextField.text = ""
         self.mediaURLTextField.text = ""
+        
+        //Assign delegates for textFields
         self.locationTextField.delegate = self
         self.mediaURLTextField.delegate = self
     }
@@ -41,10 +49,11 @@ class InfoPostingViewController: UIViewController {
         unsubscribeFromKeyboardNotifications()
     }
     
+    //MARK: - dismiss: Dismiss the actual viewcontroller
     @IBAction func dismiss(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
-    
+    //MARK: - findLocation: Reverse geolocate from string, if successful save date for passing to AddLocationsViewController
     @IBAction func findLocation(_ sender: Any) {
         setFindLocation(true)
         if self.locationTextField.text != "" && self.mediaURLTextField.text != "" {
@@ -55,7 +64,7 @@ class InfoPostingViewController: UIViewController {
             showAlert(ofType: .emptyFields, message: "Some of the fields are still empty")
         }
     }
-    
+    //MARK: - prepare: Set the properties to pass to AddLocationViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "addLocationSegue"{
             let controller = segue.destination as! AddLocationViewController
@@ -64,14 +73,14 @@ class InfoPostingViewController: UIViewController {
             controller.geoLocation = self.geoLocation
         }
     }
-    
+    //MARK: - showAlert: Create an alert with dynamic titles according to the type of error
     func showAlert(ofType type: AlertNotification.ofType, message: String){
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
         setFindLocation(false)
     }
-    
+    //MARK: - getCoordinate: Get the coordinates from string using geocodeAddressString
     func getCoordinate( addressString : String, completionHandler: @escaping(CLLocationCoordinate2D, NSError?) -> Void ) {
         
         let geocoder = CLGeocoder()
@@ -89,7 +98,7 @@ class InfoPostingViewController: UIViewController {
             }
         }
     }
-    
+    //MARK: - handleGeoLocation: If obtained location is valid perfom segue if not show alert
     func handleGeoLocation(location : CLLocationCoordinate2D, error : NSError?){
         if let _ = error{
             showAlert(ofType: .incorrectGeoLocation, message: "The location provided doesn't exist")
@@ -99,6 +108,7 @@ class InfoPostingViewController: UIViewController {
         }
     }
     
+    //MARK: - setFindLocation: Control the activityViewIndicatior when to start and stop animating
     func setFindLocation(_ findLocation: Bool){
         if findLocation {
            activityIndicatorView.startAnimating()
@@ -157,6 +167,8 @@ class InfoPostingViewController: UIViewController {
 }
 
 extension InfoPostingViewController: UITextFieldDelegate {
+   
+    //MARK: textFieldShouldReturn: Dismiss keyboard if return was pressed
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true

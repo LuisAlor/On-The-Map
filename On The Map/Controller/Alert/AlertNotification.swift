@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Alert class to customize the titles of our alertview
 class AlertNotification{
     
     struct Titles {
