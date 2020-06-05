@@ -75,6 +75,7 @@ class AddLocationViewController: UIViewController {
     func handleCreateLocationResponse(success: Bool, error: Error?){
         if success {
             isPostingLocation(false)
+            
             self.dismiss(animated: true, completion: nil)
         } else {
             showAlert(ofType: .createLocationFailed, message: error?.localizedDescription ?? "")
